@@ -13,6 +13,9 @@ function ProgramOnLoad() {
         bclickpomodoro = true;
     });
     document.addEventListener(timer.OnTimerEnded, _UpdateTimeEndedText);
+    document.addEventListener(timer.OnTimerEnded, t => {
+        _SetSkipButtonVisibility(false)
+    });
     document.addEventListener(timer.OnTimerTypeChanged, t => {
         bclickpomodoro = true;
     });
@@ -23,7 +26,17 @@ function ProgramOnLoad() {
     );
     _UpdatePomodoroCountText(taskmanager.getCurrentPomodoro());
     _SetButtons()
+    _SetSkipButtonVisibility(false)
     WriteAllTaskOnDocument();
+}
+
+function _SetSkipButtonVisibility(isVisible){
+    if(!isVisible){
+        document.getElementById('btnSkip').style.visibility = "hidden";
+    }
+    else{
+        document.getElementById('btnSkip').style.visibility = "visible";
+    }
 }
 
 function WriteAllTaskOnDocument(){
@@ -35,11 +48,13 @@ function ClickStartButton(){
     _UpdateStartButtonText(bclickstart);
     if(bclickstart) {
         timer.StartTimer();
+        
     }
     else{
         timer.StopTimer();
     }
     bclickstart = !bclickstart;
+    _SetSkipButtonVisibility(true)
 
 }
 
@@ -73,7 +88,6 @@ function _SetButtons(){
     )
 }
 function clickedSkipButton(){
-    //it change timer type to next one 
     timer.ChangeToNextTimer();
 }
 
