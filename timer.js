@@ -26,7 +26,6 @@ const _timelongbreakreference = new Time(15, 0);
 let _currentTime = _timeReference.clone();
 let _timer = null;
 
-// Dışarıdan erişilebilen güncel zaman nesnesi
 let time = _currentTime;
 
 
@@ -36,7 +35,10 @@ export const OnTimerEnded = "custom:OnTimerEnded"; //it indicated when timer fin
 
 // Event nesneleri yalnızca bir kez oluşturulur.
 
-
+/**
+ * it start the timer
+ * and create a interval
+ */
 function StartTimer() {
     // Zaten çalışıyorsa ikinci bir interval oluşturma
     if (_timer !== null) return;
@@ -60,14 +62,18 @@ function _setCurrentTimerType(timertype) {
     _currentTimerType = timertype;
 }
 
-
+/**
+ * it stop timer and destroy timer interval
+ */
 function StopTimer() {
     if (_timer !== null) {
         clearInterval(_timer);
         _timer = null;
     }
 }
-
+/**
+ * it reset timer to Pomodoro mode, dispact OnTimerEnded  and reset time to new timer type
+ */
 function ResetTimer() {
     StopTimer();
     _currentTime = _timeReference.clone();
@@ -77,6 +83,9 @@ function ResetTimer() {
     document.dispatchEvent(new Event(OnTimerEnded));
     
 }
+/**
+ * it reset timer to Longbreak mode, dispact OnTimerEnded  and reset time to new timer type
+ */
 function ResetTimerLongBreak() {
     StopTimer();
     _currentTime = _timelongbreakreference.clone();
@@ -85,6 +94,9 @@ function ResetTimerLongBreak() {
     document.dispatchEvent(new Event(OnTimerTypeChanged));
     document.dispatchEvent(new Event(OnTimerEnded));
 }
+/**
+ * it reset timer to Shortbreak mode, dispact OnTimerEnded  and reset time to new timer type
+ */
 function ResetTimerShortBreak() {
     StopTimer();
     _currentTime = _timeshortbreakreference.clone();
@@ -94,7 +106,9 @@ function ResetTimerShortBreak() {
     document.dispatchEvent(new Event(OnTimerEnded));
 }
 
-
+/**
+ * it decrease timer time in every second
+ */
 function _decreaseCurrentTime() {
     if (
         _currentTime.minute === 0 &&
@@ -113,7 +127,9 @@ function _decreaseCurrentTime() {
     _SendCurrentTimeInformation();
 
 }
-// it send information about the current time to frontend
+/**
+ * it send current time information to document event
+ */
 function _SendCurrentTimeInformation(){
     document.dispatchEvent(
     new CustomEvent(OnTimeUpdate, {
@@ -123,7 +139,12 @@ function _SendCurrentTimeInformation(){
         })
     );
 }
+/**
+ * Changes the timer type to the next one.
+ * it change into long or short in pomodoro, or otherwise happen
+ */
 function ChangeToNextTimer(){
+    //it change timer type to next one 
     const currentTimerType = getCurrentTimerType();
     if(currentTimerType == TimerType.POMODORO){
         if(taskmanager.getCurrentPomodoro() % 4 == 0) {

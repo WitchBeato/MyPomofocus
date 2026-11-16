@@ -14,7 +14,6 @@ function ProgramOnLoad() {
     });
     document.addEventListener(timer.OnTimerEnded, _UpdateTimeEndedText);
     document.addEventListener(timer.OnTimerTypeChanged, t => {
-        console.log('SADASDAS')
         bclickpomodoro = true;
     });
     document.addEventListener(taskmanager.OnPomodoroUpdate, e =>
@@ -44,6 +43,7 @@ function ClickStartButton(){
 
 }
 
+
 function ClickPomodorotButton() {
     if(!bclickpomodoro) return;
     timer.ResetTimer();
@@ -66,7 +66,17 @@ function _SetButtons(){
             clickedLongBreak();
         }
     )
+    document.getElementById("btnSkip").addEventListener("click", e =>
+    {
+        clickedSkipButton();
+    }
+    )
 }
+function clickedSkipButton(){
+    //it change timer type to next one 
+    timer.ChangeToNextTimer();
+}
+
 function clickedLongBreak(){
             timer.ResetTimerLongBreak();
 }

@@ -3,19 +3,32 @@ import {Task} from "./TaskObject.js"
 
 export const OnPomodoroUpdate = "custom:OnPomodoroUpdate";
 export const OnTaskbarUpdate = "custom:OnTaskbarUpdate";
-let _taskList = [new Task('css',0,3,0),new Task('js',0,2,1)];
-let _currentTask;
+let _taskList = [];
+let _currentTaskID = -1;
 let _currentPomodoroNumber = 1;
 
 
 function ProgramOnLoad(){
     //it will update the program according the data saved by pc memory
+    AddNewTaskinList("CSS",3)
+    AddNewTaskinList("JS",4)
     document.addEventListener(timer.OnTimerEnded, e => {
         if(timer.getCurrentTimerType() != timer.TimerType.POMODORO) return;
-        IncreasePomodorobyOne()
+        IncreasePomodorobyOne();
+        _UpdatePomodoroNumberonUpdate();
     });
     setCurrentPomodoro(_currentPomodoroNumber);
+    if(_taskList.length > 0){
+        _currentTaskID = 0
+    }
 }
+
+function _UpdatePomodoroNumberonUpdate(){
+    let _task = _taskList[_currentTaskID];
+    _task.IncreasePomodorobyOne();
+    document.dispatchEvent(OnTaskbarUpdate)
+}
+
 function GetAllTaskinHTMLForm(){
     console.log('kontrol edılıyor');
     if(!(_taskList[0] instanceof Task)) return;
@@ -25,6 +38,11 @@ function GetAllTaskinHTMLForm(){
         htmlText += task.GetTaskinHTML();
     }
     return htmlText;
+}
+function AddNewTaskinList(name,maxPomodoro){
+    let _task = new Task(name, 0, maxPomodoro,_taskList.length)
+    _taskList.push(_task)
+
 }
 
 function IncreasePomodorobyOne(){
