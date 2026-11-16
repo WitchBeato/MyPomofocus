@@ -27,7 +27,7 @@ function ProgramOnLoad() {
     _UpdatePomodoroCountText(taskmanager.getCurrentPomodoro());
     _SetButtons()
     _SetSkipButtonVisibility(false)
-    WriteAllTaskOnDocument();
+    //WriteAllTaskOnDocument();
 }
 
 function _SetSkipButtonVisibility(isVisible){
@@ -48,7 +48,6 @@ function ClickStartButton(){
     _UpdateStartButtonText(bclickstart);
     if(bclickstart) {
         timer.StartTimer();
-        
     }
     else{
         timer.StopTimer();
